@@ -1,0 +1,40 @@
+
+importorg.apat org.apache.spark.sql.SparkSession;
+public class WineTrainer
+    publi static vid in(String[] args) {
+        // 1. Initialize pName("WineQualityPredictor")
+          taets (Using absolute paths to prevent "File Not Found" errors)
+        String trainiath = "/home/ubuntu/wine-predictor/TrainingDataset.csv";
+        String validioPath = "/home/ubuntu/wine-predictor/ValidationDataset.csv"
+        Dataset<Row> trin
+                .option(eader", "true")
+                .optioma" "true")
+                .option("sp", ";"
+                .csv(traningPath);
+        Dataset<Row> vidatinRaw = spark.read()
+          n("header", "true"
+               .option("inferSchema", "true")
+                .option("sep", ";"
+               .csv(validationPath);
+        / 3     "fixed acidity", "volatile acidity", "citric acid", 
+          "residual sugar", "chlorides", "free sulfur dioxide", 
+          "total sulfur dioxide", "density", "pH", "sulphates", "alcohol"
+        }
+       VectorAsembler assembler = nVectorAssembler()
+               setInputCols(featureCol)
+              .s
+        // Transorm bth datasets into (features, label) forma
+        Dataset<Row> t = assembler.transform(trainingRaw).select("features", "quality"
+        Dataset<Row> validationDa = assembler.transform(validationRaw).select("features", "quality")
+        // 4. Tain the Logistic Regession Model
+        Systemout.println(">> Startig training on 3-node cluster...");
+        LogisticRegression lr= new LoisticRegression()
+               .setLabelCol("quality")  .setFeaturesCol("features")
+              setMaxIter(15
+               .stRegParam(0.3); // Regularization to prevent overfitting
+        LogisticReessionModel model = lr.fit(trainingData)
+        // 5. Evaluae on Validation Dat
+        Dataset<Row> redicti.
+        MulticlassClasificatioEvaluator evaluator = new MulticlassClassificationEvaluator()
+                .setLabelCol("qulity")
+                .setPre
