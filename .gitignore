@@ -8,3 +8,4 @@ target/
 *.jar
 spark-keys.pem
 best-wine-model/
+.DS_Store
